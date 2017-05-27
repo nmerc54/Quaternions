@@ -35,6 +35,18 @@ class Quaternion:
 	def getQ(self):
 		return [self.get_q1(), self.get_q2(), self.get_q3(), self.get_q4()]
 
+	def set_q1(self, q):
+		self._q1 = q
+	
+	def set_q2(self, q):
+		self._q2 = q
+	
+	def set_q3(self, q):
+		self._q3 = q
+	
+	def set_q4(self, q):
+		self._q4 = q
+	
 	def normalize(self):
 		norm = pow(self.get_q1(),2) + pow(self.get_q2(),2) + pow(self.get_q3(),2) + pow(self.get_q4(),2)
 		norm = sqrt(norm)
@@ -110,6 +122,22 @@ class Quaternion:
 	
 		return [roll, pitch, yaw]
 
+	def __add__(self, other):
+		q_1 = self.get_q1() + other.get_q1() 
+		q_2 = self.get_q2() + other.get_q2()
+		q_3 = self.get_q3() + other.get_q3()
+		q_4 = self.get_q4() + other.get_q4()
+
+		return Quaternion(q_1, q_2, q_3, q_4)
+	
+	def __sub__(self, other):
+		q_1 = self.get_q1() - other.get_q1() 
+		q_2 = self.get_q2() - other.get_q2()
+		q_3 = self.get_q3() - other.get_q3()
+		q_4 = self.get_q4() - other.get_q4()
+
+		return Quaternion(q_1, q_2, q_3, q_4)
+
 	def __repr__(self):
 		disp = "Quaternion Class\n----------------\n"
 		disp += "q1 = " + str(self.get_q1()) + '\n' 
@@ -126,28 +154,39 @@ class Quaternion:
 		return disp
 
 if __name__ == "__main__":
-	q = Quaternion(1.0, 2.0, 3.0, 4.0)
-	q.normalize()
-		
+	
+	"""
+	q1 = Quaternion(0.50, -0.50, -0.50, 0.50)
+	q1.normalize()
+	
+	q2 = Quaternion(0.01, 0.10, 0.02, 0.25)
+	
+	q3 = q1 + q2
+	q4 = q1 - q2
+
+	print "q1: " + str(q1)
+	print "q2: " + str(q2)
+	print "q3: " + str(q3)
+	print "q4: " + str(q4)
+
+
+	print "Quaternions:"	
 	print q
 
 	euler_angles = q.getEuler()
 	euler_angles_deg = q.getEulerD()
 
+	print "\nEuler Angles (rad):"
 	print euler_angles
+	
+	print "\nEuler Angles (deg):"
 	print euler_angles_deg
 	
+	print "\nRotate vector r (1,2,3) by quaternion:"
 	r = [1,2,3]
 	print q > r
-			
-
-	"""
-	print "q1: " + str( q.get_q1() )
-	print "q2: " + str( q.get_q2() )
-	print "q3: " + str( q.get_q3() )
-	print "q4: " + str( q.get_q4() )
-
-	print "Q: " + str( q.getQ() )
 	"""
 	
+
+
 	
