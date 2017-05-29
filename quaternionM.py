@@ -65,21 +65,22 @@ class QuaternionM(object):
 		Rotate the vector (vx, vy, vz) by self (q1, q2, q3, q4).
 		should implement without cosine matrix if possible.
 		---------------------------------------------------------"""
-		if type(vector_3d) is not (list or np.ndarray):
-			raise QuatError("ERROR: Input must be a NumPy Array")
-
 		if type(vector_3d) is list:
 			vector_3d = np.array(vector_3d)
+		
+		if type(vector_3d) is not np.ndarray:
+			raise QuatError("ERROR: Input must be a NumPy Array")
 
 		if len(vector_3d) != 3:
 			raise QuatError("ERROR: Input must be of length 3")
 
-		if self.norm() != 1:
-			raise QuatError("ERROR: Not Unit-Quaternion")		
+	#	if self.norm() != 1.0:
+	#		print "norm is: " + str(self.norm())
+	#		raise QuatError("ERROR: Not Unit-Quaternion")		
 
-		vx = vector_3d[0]
-		vy = vector_3d[1]
-		vz = vector_3d[2]
+		vx = vector_3d.item(0)
+		vy = vector_3d.item(1)
+		vz = vector_3d.item(2)
 
 		q0 = self.get_q1()
 		q1 = self.get_q2()
@@ -188,16 +189,23 @@ class QuatError(Exception):
 if __name__ == "__main__":
 	
 	q1 = QuaternionM(0.50, -0.50, -0.50, 0.50)
-	q2 = QuaternionM(1,2,3,4)
+	quat2 = QuaternionM(1,2,3,4)
 
 	print "q1: " + str(q1)
-	print "q2: " + str(q2)
+	print "norm: " + str(q1.norm())
 
-	print "Rotate an np.array of lengtrh 3:"
-	n = np.array( [1,2,3] )
-	print(q1 > n)
-	print(q2 > n)
+	print "q2: " + str(quat2)
+	print "norm: " + str( quat2.norm() )
+	
+	try:
+		print "Rotate an np.array of lengtrh 3:"
+		n = np.array( [1,2,3] )
+		#print(q1 > n)
+		print(quat2 > n)
+	except QuatError as detail:
+		print detail
 
+"""
 	try:
 		r = np.array( [1,2,2,3] )
 		q1 > r
@@ -241,4 +249,4 @@ if __name__ == "__main__":
 	except QuatError as detail:
 		print "\nAdd with a quaternion"
 		print detail
-
+"""
