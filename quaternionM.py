@@ -11,9 +11,16 @@
 * COPYRIGHT 2017 NICHOLAS MERCADANTE, All Rights Reserved.
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """
+# IMPORTS
 from math import *
 import numpy as np
 
+
+"""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*                  Quaternion Matrix Class                      *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"""
 class QuaternionM(object):
 	def __init__(self, q1, q2, q3, q4):
 		
@@ -91,7 +98,7 @@ class QuaternionM(object):
 		r2 = vx*(2*(q1*q2-q0*q3)) +	vy*(1-2*pow(q1, 2)-2*pow(q3, 2)) + vz*(2*(q2*q3+q0*q1))
 		r3 = vx*(2*(q1*q3+q0*q2)) +	vy*(2*(q2*q3-q0*q1)) + vz*(1-2*pow(q1, 2)-2*pow(q2, 2))
 
-		return [r1, r2, r3] # Rotated Vector 
+		return np.array( [r1, r2, r3] ) # Rotated Vector 
 
 
 	def __gt__(self, vector_3d):
@@ -119,7 +126,7 @@ class QuaternionM(object):
 		pitch = asin( 2*(q2*q4 - q1*q3))
 		yaw   = atan2( 2*(q3*q4 + q1*q2) , 1-2*(pow(q2, 2) + pow(q3, 2)))
 	
-		return [roll, pitch, yaw]
+		return np.array( [roll, pitch, yaw] )
 
 
 	def getEulerD(self):
@@ -136,7 +143,7 @@ class QuaternionM(object):
 		pitch = asin( 2*(q2*q4 - q1*q3)) * r2d
 		yaw   = atan2( 2*(q3*q4 + q1*q2) , 1-2*(pow(q2, 2) + pow(q3, 2))) * r2d
 	
-		return [roll, pitch, yaw]
+		return np.array( [roll, pitch, yaw] )
 
 
 	def __add__(self, other):
@@ -180,14 +187,62 @@ class QuaternionM(object):
 		return disp
 
 
+"""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*                         Exceptions                            *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"""
 
 class QuatError(Exception):
 	pass
 
 
 
-if __name__ == "__main__":
+
+"""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*                     Helper Functions                          *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"""
+def quatSkew(w):
+	"""
+	Skew-Symmetric Matrix:
+		INPUT: 	np.array of angular velocity
+		OUTPUT:	np.matrix of size 4x4
+	"""
+
+	if type(w) is not np.ndarray:
+		raise QuatError("ERROR: w must be of type np.array")
+	if len(w) != 3:
+		raise QuatError("ERROR: w must be of length 3")
 	
+
+	row_1 = [0					, w.item(2)	, -w.item(1), w.item(0)	]
+	row_2 = [-w.item(2), 0					, w.item(0)	, w.item(1)	]
+	row_3 = [w.item(1)	, -w.item(0), 0					, w.item(2)	]
+	row_4 = [-w.item(0), -w.item(1), -w.item(2), 0					]
+
+	return np.matrix([ row_1, row_2, row_3, row_4 ])
+
+
+
+
+"""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*                        Tests                                  *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"""
+
+
+if __name__ == "__main__":
+
+	angular_velocity = np.array([ 0.1, 0.1, 0.2 ])
+	print "Length: " + str(len(angular_velocity))
+	print quatSkew(angular_velocity)
+
+
+
+	"""	
 	q1 = QuaternionM(0.50, -0.50, -0.50, 0.50)
 	quat2 = QuaternionM(1,2,3,4)
 
@@ -205,7 +260,7 @@ if __name__ == "__main__":
 	except QuatError as detail:
 		print detail
 
-"""
+
 	try:
 		r = np.array( [1,2,2,3] )
 		q1 > r
