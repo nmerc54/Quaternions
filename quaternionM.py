@@ -15,6 +15,11 @@
 from math import *
 import numpy as np
 
+#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+#$ NOTE: 1. Need to implement multiply for vectors and scalars $$
+#$       2. Need to also implement a "qdot" class that is not  $$
+#$          normalized                                         $$
+#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 """
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
