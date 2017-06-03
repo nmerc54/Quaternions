@@ -194,6 +194,59 @@ class QuaternionM(object):
 
 """
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*                  Quaternion Matrix Class                      *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"""
+class QuatDotM:
+	def __init__(self, qd1 = 0, qd2 = 0, qd3 = 0, qd4 = 0):
+		self._Qd = np.array([qd1, qd2, qd3, qd4])
+		
+	def get_qd1(self):
+		return self._Qd.item(0)
+	
+	def get_qd2(self):
+		return self._Qd.item(1)
+	
+	def get_qd3(self):
+		return self._Qd.item(2)
+	
+	def get_qd4(self):
+		return self._Qd.item(3)
+
+	def getQdArray(self):
+		return self._Qd
+
+	def getQdMat(self):
+		return np.matrix( self.getQdArray() ).transpose()
+
+	def setQd(self, qd1, qd2, qd3, qd4):
+		self._Qd = np.array([qd1, qd2, qd3, qd4])
+
+	def setQdM(self, qd_matrix):
+		if len(qd_matrix) != 4:
+			raise QuatError("ERROR: Matrix must have exactly 4 elements")
+	
+		self._Qd = np.squeeze(np.asarray(qd_matrix))
+
+
+	def __repr__(self):
+		disp = "Quaternion Derivative Class\n----------------------------\n"
+		disp += "qd1 = " + str(self.get_qd1()) + '\n' 
+		disp += "qd2 = " + str(self.get_qd2()) + '\n' 
+		disp += "qd3 = " + str(self.get_qd3()) + '\n'
+		disp += "qd4 = " + str(self.get_qd4()) + '\n'
+		return disp
+
+
+	def __str__(self):
+		disp =  "[" + str(self.get_qd1()) + ', ' 
+		disp += str(self.get_qd2()) + ', ' 
+		disp += str(self.get_qd3()) + ', '
+		disp += str(self.get_qd4()) + ']'
+		return disp
+
+"""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 *                         Exceptions                            *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """
@@ -228,6 +281,24 @@ def quatSkew(w):
 	row_4 = [-w.item(0), -w.item(1), -w.item(2), 0					]
 
 	return np.matrix([ row_1, row_2, row_3, row_4 ])
+
+
+
+def quatIntegrate(quat1, qdot1, time_step):
+	"""
+	quat1 		-> type QuaternionM
+	qdot1 		-> type QuatDotM
+	time-step	-> type float
+
+	Returns a QuaternionM
+	"""
+
+	quaternion_matrix = quat1.getQMat()
+	quat_deriv_matrix = qdot1.getQdMat()
+
+	new_quaternion = quaternion_matrix + quat_deriv_matrix * time_step
+
+	return QuaternionM(new_quaternion.item(0), new_quaternion.item(1), new_quaternion.item(2), new_quaternion.item(3))
 
 
 
