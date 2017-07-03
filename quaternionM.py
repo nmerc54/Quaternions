@@ -15,12 +15,6 @@
 from math import *
 import numpy as np
 
-#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#$ NOTE: 1. Need to implement multiply for vectors and scalars $$
-#$       2. Need to also implement a "qdot" class that is not  $$
-#$          normalized                                         $$
-#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
 """
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 *                  Quaternion Matrix Class                      *
@@ -194,7 +188,7 @@ class QuaternionM(object):
 
 """
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-*                  Quaternion Matrix Class                      *
+*             Quaternion Derivative Matrix Class                *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """
 class QuatDotM:
